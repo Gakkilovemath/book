@@ -422,7 +422,7 @@ void	ICM(int N, int n, int **freq, int K, int **ind, double **F,
     int		*first,nlast,i,j,k,iteration1,*m,*n1,m_total;
     double	**cumw,**cs,**v,**w,**nabla,**F_new;
     double	**y;
-    double	sum,alpha,lambda,inprod,partialsum,phi;
+    double	alpha,lambda,inprod,partialsum;
     
     y= new double *[K+2];
     F_new=new double *[K+2];
@@ -511,7 +511,7 @@ void	ICM(int N, int n, int **freq, int K, int **ind, double **F,
     
     for (i=1;i<=n;i++)
     {
-        sum=0;
+        double sum=0;
         for (k=1;k<=K;k++)
             sum += F[k][i];
         F[K+1][i]=sum;
@@ -554,7 +554,7 @@ void	ICM(int N, int n, int **freq, int K, int **ind, double **F,
         
         ICM_iteration(N,n,K,nlast,first,m,freq,ind,y,F,F_new,cumw,cs,v,w,nabla,&lambda,&alpha);
         
-        phi=phi_ICM(n,K,nlast,freq,F);
+        double unused_phi=phi_ICM(n,K,nlast,freq,F);
     }
     
     *phi1=phi_ICM(n,K,nlast,freq,F);
@@ -575,7 +575,7 @@ void 	ICM_iteration(int N, int n, int K, int nlast, int first[], int m[], int **
                       double **nabla, double *lambda1, double *alpha1)
 {
     int 	i,j,k;
-    double 	a,lambda,alpha;
+    double 	lambda,alpha;
     
     lambda=*lambda1;
     
@@ -619,7 +619,7 @@ void 	ICM_iteration(int N, int n, int K, int nlast, int first[], int m[], int **
     
     if (F_new[K+1][nlast]>=1)
     {
-        a=(1-F[K+1][nlast])/(F_new[K+1][nlast]-F[K+1][nlast]);
+        double a=(1-F[K+1][nlast])/(F_new[K+1][nlast]-F[K+1][nlast]);
         for (k=1;k<=K;k++)
         {
             for (i=first[k];i<=n;i++)
@@ -687,11 +687,10 @@ double 	compute_lambda(int N, int n, int K, int **freq, double **F)
 void compute_Fplus(int n, int K, double **F)
 {
     int i,k;
-    double sum;
     
     for (i=1;i<=n;i++)
     {
-        sum=0;
+        double sum=0;
         for (k=1;k<=K;k++)
             sum += F[k][i];
         F[K+1][i]=sum;
@@ -701,7 +700,8 @@ void compute_Fplus(int n, int K, double **F)
 
 void compute_nabla(int N, int n, int K, int first[], int m[], int **freq, double **F, double lambda, double **nabla)
 {
-    int i,j,k;
+
+    int i,k;
     
     for (k=1;k<=K;k++)
     {
@@ -711,7 +711,7 @@ void compute_nabla(int N, int n, int K, int first[], int m[], int **freq, double
     
     for (k=1;k<=K;k++)
     {
-        j=0;
+        int j=0;
         for (i=first[k];i<=n;i++)
         {
             if (freq[k][i]>0)
@@ -872,12 +872,11 @@ double phi_ICM(int n, int K, int nlast, int **freq, double **F)
 
 void Compute_F(int K, int n, int **freq, int first[], double **y, double **F)
 {
-    int k,i,j;
-    
-    for (k=1;k<=K;k++)
+
+    for (int k=1;k<=K;k++)
     {
-        j=0;
-        for (i=first[k];i<=n;i++)
+        int j=0;
+        for (int i=first[k];i<=n;i++)
         {
             if (freq[k][i]>0)
             {
@@ -908,11 +907,11 @@ void cumsum(int K, int m[], double **v, double **cs)
 
 void convexmin(int K, int m[], double **cumw, double **cs, double **w, double **y)
 {
-    int	i,j,k,n,m1;
+    int	i,j,n;
     
-    for (k=1;k<=K;k++)
+    for (int k=1;k<=K;k++)
     {
-        m1=m[k];
+        int m1=m[k];
         cs[k][0] = 0;
         cumw[k][0] = 0;
         
@@ -1060,16 +1059,14 @@ double KK(double x)
 
 double bdf(double A, double B, int k, int njumps[], double **jumploc, double **p, double h, double u)
 {
-    int			j;
-    double		t1,t2,t3,sum;
+
+    double sum=0;
     
-    sum=0;
-    
-    for (j=0;j<njumps[k];j++)
+    for (int j=0;j<njumps[k];j++)
     {
-        t1=(u-jumploc[k][j])/h;
-        t2=(u+jumploc[k][j]-2*A)/h;
-        t3=(2*B-u-jumploc[k][j])/h;
+        double t1=(u-jumploc[k][j])/h;
+        double t2=(u+jumploc[k][j]-2*A)/h;
+        double t3=(2*B-u-jumploc[k][j])/h;
         sum+= (KK(t1)+KK(t2)-KK(t3))*p[k][j];
     }
     return fmax(0,sum);
@@ -1125,7 +1122,7 @@ void bootstrap(double A, double B, int NumIt, int N, int K, int ngrid, double gr
                double x2[], double data2[], int delta[], int delta2[], int **freq2, double **p2,
                double **jumploc2, int njumps2[], double **F2, int **ind2, double **dens2, double **Fsmooth2, double ***f3, double **hazard)
 {
-    int iter,i,j,k,n2,iterations,n_Iterations=1000;
+    int iter,i,k,iterations,n_Iterations=1000;
     double h1,h2,phi,c,tol=1.0e-10;
     
     c=B;
@@ -1146,8 +1143,7 @@ void bootstrap(double A, double B, int NumIt, int N, int K, int ngrid, double gr
                 freq2[k][i]=0;
         }
         
-        j=0;
-        
+        int j=0;
         
         for (i=1;i<=N;i++)
         {
@@ -1164,7 +1160,7 @@ void bootstrap(double A, double B, int NumIt, int N, int K, int ngrid, double gr
             }
         }
         
-        n2=j;
+        int n2=j;
         
         
         ICM(N,n2,freq2,K,ind2,F2,n_Iterations,&phi,&iterations,tol);
@@ -1239,14 +1235,14 @@ int CompareTime(const void *a, const void *b)
 
 void data_bootstrap(int n, double x[], double x2[], int delta[], int delta2[])
 {
-    int	i,j;
+    int	i;
     SampleTime *obs;
     
     obs = new SampleTime[n+1];
     
     for (i=1;i<=n;i++)
     {
-        j=1+rand()%n;
+        int j=1+rand()%n;
         
         x2[i]=x[j];
         delta2[i]=delta[j];
