@@ -75,7 +75,8 @@ List ComputeMLE(DataFrame input)
     Rcpp::IntegerVector delta = DF["V2"];
     
     Rcpp::Rcout << std::endl;
-    Rcpp::Rcout << "Piet Groeneboom 2015" << std::endl << "For more information please see:" << std::endl;
+    Rcpp::Rcout << "Piet Groeneboom 2015, academic use only." << std::endl;
+    Rcpp::Rcout << "For more information please see:" << std::endl;
     Rcpp::Rcout << "Nonparametric Estimation under Shape Constraints, pp. 10-11 and 367-369," << std::endl;
     Rcpp::Rcout << "Piet Groeneboom & Geurt Jongbloed, Cambridge University Press, 2014." << std::endl << std::endl;
     
@@ -553,8 +554,6 @@ void	ICM(int N, int n, int **freq, int K, int **ind, double **F,
         iteration1++;
         
         ICM_iteration(N,n,K,nlast,first,m,freq,ind,y,F,F_new,cumw,cs,v,w,nabla,&lambda,&alpha);
-        
-        double unused_phi=phi_ICM(n,K,nlast,freq,F);
     }
     
     *phi1=phi_ICM(n,K,nlast,freq,F);
@@ -1133,8 +1132,7 @@ void bootstrap(double A, double B, int NumIt, int N, int K, int ngrid, double gr
     
     for (iter=0;iter<NumIt;iter++)
     {
-        Rcpp::Rcout << std::setw(10) << iter+1 << "\r"; //std::endl;
-        //printf("%5d\n",iter);
+        Rcpp::Rcout << std::setw(10) << iter+1 << "\r";
         data_bootstrap(N,data,x2,delta,delta2);
         
         for (k=0;k<=K;k++)

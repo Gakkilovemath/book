@@ -53,6 +53,13 @@ List ComputeMLE(DataFrame input)
     Rcpp::NumericVector data = DF["V1"];
     Rcpp::IntegerVector delta = DF["V2"];
     
+    Rcpp::Rcout << std::endl;
+    Rcpp::Rcout << "Piet Groeneboom 2015, academic use only." << std::endl;
+    Rcpp::Rcout << "For more information please see:" << std::endl;
+    Rcpp::Rcout << "Nonparametric Estimation under Shape Constraints, pp. 10-11. << std::endl;
+    Rcpp::Rcout << "Piet Groeneboom & Geurt Jongbloed, Cambridge University Press, 2014." << std::endl << std::endl;
+
+    
     // determine the number of rows of the data frame
     
     ndata = (int)data.size();
