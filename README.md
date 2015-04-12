@@ -16,9 +16,9 @@ If one gets an error message of the type "sourceCpp cannot be found", the script
 The directory "non-grouped" has the data file in a format where the observation times
 are non-unique and where the ties at observation are computed by the program.
 The directory "grouped" has the data file in a format where the observation times
-are unique and where the number of observation of a certain type are given at each
-observation. Not the different structure of the input file!
-The rbootstrap directory has the input format in the "ungrouped style"."
+are unique and where the number of observations of a certain type are given at each
+observation. Note the different structures of the input files in the grouped and non-grouped
+directories! The rbootstrap directory has the input format in the "ungrouped style".
 For more information on the present examples, see Rscripts.pdf.
 
 In copying the files from the site, one should push the button "raw" above the file in GitHub,
