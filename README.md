@@ -13,6 +13,12 @@ One needs recent versions of R and then the examples run in any case on Mac, Win
 Linux (also on virtual versions of these sytems). One also needs the Rcpp package
 for the command "sourceCpp", which makes the connection between the C++ code and R.
 If one gets an error message of the type "sourceCpp cannot be found", the script will not work.
+The directory "non-grouped" has the data file in a format where the observation times
+are non-unique and where the ties at observation are computed by the program.
+The directory "grouped" has the data file in a format where the observation times
+are unique and where the number of observation of a certain type are given at each
+observation. Not the different structure of the input file!
+The rbootstrap directory has the input format in the "ungrouped style"."
 For more information on the present examples, see Rscripts.pdf.
 
 In copying the files from the site, one should push the button "raw" above the file in GitHub,
