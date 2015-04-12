@@ -48,12 +48,6 @@ List ComputeMLE(NumericVector T, IntegerMatrix frequencies, int K)
     double  a,b,*T1,**F,phi,*grid,**p,**jumploc,step,bandwidth,tol=1.0e-10;
     int     i,j,k,m,ndata,N,iterations,**ind,*njumps,**freq;
     int     n_Iterations=1000, ngrid=1000;
-    
-    Rcpp::Rcout << std::endl;
-    Rcpp::Rcout << "Piet Groeneboom 2015, academic use only." << std::endl;
-    Rcpp::Rcout << "For more information please see:" << std::endl;
-    Rcpp::Rcout << "Nonparametric Estimation under Shape Constraints, pp. 10-11. << std::endl;
-    Rcpp::Rcout << "Piet Groeneboom & Geurt Jongbloed, Cambridge University Press, 2014." << std::endl << std::endl;
        
     // determine the number of rows of the matrix
     
