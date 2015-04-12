@@ -14,7 +14,7 @@ Linux (also on virtual versions of these sytems). One also needs the Rcpp packag
 for the command "sourceCpp", which makes the connection between the C++ code and R.
 If one gets an error message of the type "sourceCpp cannot be found", the script will not work.
 The directory "non-grouped" has the data file in a format where the observation times
-are non-unique and where the ties at observation are computed by the program.
+are non-unique and where the ties at the observations are computed by the program.
 The directory "grouped" has the data file in a format where the observation times
 are unique and where the number of observations of a certain type are given at each
 observation. Note the different structures of the input files in the grouped and non-grouped
