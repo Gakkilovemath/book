@@ -12,7 +12,10 @@ computes 95% confidence intervals for the hazards.
 One needs recent versions of R and then the examples run in any case on Mac, Windows and
 Linux (also on virtual versions of these sytems). One also needs the Rcpp package
 for the command "sourceCpp", which makes the connection between the C++ code and R.
-If one gets an error message of the type "sourceCpp cannot be found", the script will not work.
+If one gets an error message of the type "sourceCpp cannot be found", the script will not work
+and one probably has to update one's version of R. Windows users may also need to install
+the latest version of Rtools (http://cran.r-project.org/bin/windows/Rtools/index.html).
+
 The directory "non-grouped" has the data file in a format where the observation times
 are non-unique and where the ties at the observations are computed by the program.
 The directory "grouped" has the data file in a format where the observation times
