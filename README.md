@@ -15,6 +15,12 @@ for the command "sourceCpp", which makes the connection between the C++ code and
 If one gets an error message of the type "sourceCpp cannot be found", the script will not work
 and one probably has to update one's version of R. Windows users may also need to install
 the latest version of Rtools (http://cran.r-project.org/bin/windows/Rtools/index.html).
+Mac users may have to use Xcode, or at least the corresponding command line tools, see (with advices for
+Windows, Mac and Linux users):
+https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites.
+Mac users who use the GUI application, given on http://dutiosc.twi.tudelft.nl/~pietg/software.html
+do not have to download extra tools.
+
 
 The directory "non-grouped" has the data file in a format where the observation times
 are non-unique and where the ties at the observations are computed by the program.
@@ -22,8 +28,8 @@ The directory "grouped" has the data file in a format where the observation time
 are unique and where the number of observations of a certain type are given at each
 observation. Note the different structures of the input files in the grouped and non-grouped
 directories! The rbootstrap directory has the input format in the "ungrouped style".
-For more information on the present examples, see Rscripts.pdf.
 
 In copying the files from the site, one should push the button "raw" above the file in GitHub,
 to avoid getting html code instead of the file one needs.
+For more information on the present examples, see Software.pdf.
 
