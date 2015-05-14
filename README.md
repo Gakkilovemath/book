@@ -32,4 +32,6 @@ directories! The rbootstrap directory has the input format in the "ungrouped sty
 In copying the files from the site, one should push the button "raw" above the file in GitHub,
 to avoid getting html code instead of the file one needs.
 For more information on the present examples, see Software.pdf.
+The sources of the GUI Mac application are also kept on the present site in the directory
+compriskMacGui.
 
