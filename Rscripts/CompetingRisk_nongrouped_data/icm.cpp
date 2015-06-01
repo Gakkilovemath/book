@@ -384,10 +384,7 @@ void	ICM(int N, int n, int **freq, int K, int **ind, double **F,
     
     iteration1=0;
     
-    //Rcout << endl << endl;
-    
-    //Rcout << setw(10) << "iteration" << setw(10) << "alpha" << setw(10) << "F_+" << setw(15) << "phi"
-                //<< setw(15) << "lambda" << setw(15) << "inprod" << setw(20) << "partial sum" << endl << endl;
+    //cerr << setw(10) << "iteration" << setw(10) << "alpha" << setw(10) << "F_+" << setw(15) << "phi" << setw(20) << "lambda" << setw(20) << "inprod" << setw(20) << "partial sum" << endl << endl;
     
     while (iteration1<=n_It && fenchelviol(K,m,ind,y,nabla,tol,&partialsum,&inprod))
     {
@@ -397,10 +394,9 @@ void	ICM(int N, int n, int **freq, int K, int **ind, double **F,
         
         phi=phi_ICM(n,K,nlast,freq,F);
         
-        //Rcout << setw(5) << iteration1 << setw(14) << alpha << setw(14) << F[K+1][n] << setprecision(10) <<setw(15)  << phi << setw(10) << lambda << setprecision(10) << setw(20) << inprod  << setprecision(10)  << setw(20) << partialsum << endl;
+        //cerr << setw(5) << iteration1 << setw(14) << alpha << setw(14) << F[K+1][n] << setprecision(10)
+        //<<setw(15)  << phi << setprecision(10) << setw(20) << lambda << setprecision(10) << setw(20) << inprod  << setprecision(10)  << setw(20) << partialsum << endl;
     }
-    
-    //Rcout << endl << endl;
     
     *phi1=phi_ICM(n,K,nlast,freq,F);
     *iteration=iteration1;

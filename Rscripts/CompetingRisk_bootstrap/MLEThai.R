@@ -1,11 +1,6 @@
-#	Piet Groeneboom 2015, academic use only.
-#	For more information please see:
-#	Nonparametric Estimation under Shape Constraints, pp. 10-11  and 367-369.
-#	Piet Groeneboom & Geurt Jongbloed, Cambridge University Press, 2014.
-
-# 	The present script expects two columns: the first column
-# 	contains the observation times and the second column the risk 1,...,K
-# 	for which failure is observed or 0, if there is no failure.
+# The present script expects two columns: the first column
+# contains the (ordered) observation times and the second column the risk 1,...,K
+# for which failure is observed or 0, if there is no failure.
 
 
 	library(Rcpp)
@@ -46,4 +41,3 @@
    segments(x3,t3,x3,u3)
    segments(x3-0.05,t3,x3+0.05,t3)
    segments(x3-0.05,u3,x3+0.05,u3)
-		

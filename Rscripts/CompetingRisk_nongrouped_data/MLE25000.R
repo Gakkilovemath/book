@@ -1,15 +1,10 @@
-#	Piet Groeneboom 2015, academic use only.
-#	For more information please see:
-#	Nonparametric Estimation under Shape Constraints, pp. 367-369.
-#	Piet Groeneboom & Geurt Jongbloed, Cambridge University Press, 2014.
-
-# 	The present script expects two columns: the first column
-# 	contains the (ordered) observation times and the second column the risk 1,...,K
-# 	for which failure is observed or 0, if there is no failure.
+# The present script expects two columns: the first column
+# contains the (ordered) observation times and the second column the risk 1,...,K
+# for which failure is observed or 0, if there is no failure.
 
 	library(Rcpp) 
 	A<-read.table("data25000.txt")
-	sourceCpp("icm.cpp")
+	icm<-sourceCpp("icm.cpp")
 	
 	output <- ComputeMLE(A)
 	output
@@ -28,4 +23,6 @@
    	lines(z, f2(z))
    	lines(z, f(z))
    	
+  
+    save.image("data25000.RData")
 		
