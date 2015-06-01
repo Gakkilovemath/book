@@ -2,7 +2,7 @@
 Example programs for the book "Nonparametric Estimation under Shape Constraints" (2014),
 Piet Groeneboom and Geurt Jongbloed. Cambridge University Press, 2014.
 
-For running the R scripts, like MLEThai.R in the directory CompetingRisk_bootstrap, one needs three
+For running the R scripts, like MLEThai.R in the directory Rscripts/CompetingRisk_bootstrap, one needs three
 files: the R script, the input file (for the present directory this is: dataThai.txt) and the C++
 file (in this case icm.cpp). One needs to put the three files, R script, C++ file (which
 has the extension .cpp) and input file (with extension .txt), into one directory, just like
@@ -21,13 +21,12 @@ https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prer
 Mac users who use the GUI application, given on http://dutiosc.twi.tudelft.nl/~pietg/software.html
 do not have to download extra tools.
 
-
-The directory "non-grouped" has the data file in a format where the observation times
+The directory CompetingRisk_nongrouped_data has the data file in a format where the observation times
 are non-unique and where the ties at the observations are computed by the program.
-The directory "grouped" has the data file in a format where the observation times
+The directory CompetingRisk_grouped_data has the data file in a format where the observation times
 are unique and where the number of observations of a certain type are given at each
 observation. Note the different structures of the input files in the grouped and non-grouped
-directories! The rbootstrap directory has the input format in the "ungrouped style".
+directories!
 
 In copying the files from the site, one should push the button "raw" above the file in GitHub,
 to avoid getting html code instead of the file one needs.
