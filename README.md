@@ -2,8 +2,8 @@
 Example programs for the book "Nonparametric Estimation under Shape Constraints" (2014),
 Piet Groeneboom and Geurt Jongbloed. Cambridge University Press, 2014.
 
-For running the R scripts, like bootstrap.R in the directory rbootstrap, one needs three
-files: the R script, the input file (for bootstrap.R this is: dataThai.txt) and the C++
+For running the R scripts, like MLEThai.R in the directory CompetingRisk_bootstrap, one needs three
+files: the R script, the input file (for the present directory this is: dataThai.txt) and the C++
 file (in this case icm.cpp). One needs to put the three files, R script, C++ file (which
 has the extension .cpp) and input file (with extension .txt), into one directory, just like
 it is done in the repository. The bootstrap procedure draws 1000 bootstrap samples and 
