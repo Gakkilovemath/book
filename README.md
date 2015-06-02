@@ -15,6 +15,7 @@ for the command "sourceCpp", which makes the connection between the C++ code and
 If one gets an error message of the type "sourceCpp cannot be found", the script will not work
 and one probably has to update one's version of R. Windows users may also need to install
 the latest version of Rtools (http://cran.r-project.org/bin/windows/Rtools/index.html).
+
 Mac users may have to use Xcode, or at least the corresponding command line tools, see (with advices for
 Windows, Mac and Linux users):
 https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites.
@@ -32,5 +33,5 @@ In copying the files from the site, one should push the button "raw" above the f
 to avoid getting html code instead of the file one needs.
 For more information on the present examples, see Software.pdf.
 The sources of the GUI Mac application are also kept on the present site in the directory
-compriskMacGui.
+MacGui.
 
