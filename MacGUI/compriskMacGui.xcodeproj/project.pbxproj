@@ -1,0 +1,308 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		976CBE1C1AD71576004284A8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 976CBE1B1AD71576004284A8 /* Images.xcassets */; };
+		976CBE1F1AD71577004284A8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 976CBE1D1AD71577004284A8 /* MainMenu.xib */; };
+		976CBE351AD716B8004284A8 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 976CBE341AD716B8004284A8 /* AppDelegate.mm */; };
+		976CBE371AD716C7004284A8 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 976CBE361AD716C7004284A8 /* main.mm */; };
+		976CBE3B1AD71795004284A8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 976CBE3A1AD71795004284A8 /* Cocoa.framework */; };
+		976CBE3D1AD71D3D004284A8 /* main_comp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 976CBE3C1AD71D3D004284A8 /* main_comp.cpp */; };
+		976CBE3F1AD71D4F004284A8 /* icm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 976CBE3E1AD71D4F004284A8 /* icm.cpp */; };
+		976CBE411AD71D58004284A8 /* data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 976CBE401AD71D58004284A8 /* data.cpp */; };
+		976CBE431AD71D63004284A8 /* bootstrap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 976CBE421AD71D63004284A8 /* bootstrap.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		976CBE111AD71576004284A8 /* compriskMacGui.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = compriskMacGui.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		976CBE151AD71576004284A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		976CBE161AD71576004284A8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		976CBE1B1AD71576004284A8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		976CBE1E1AD71577004284A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		976CBE341AD716B8004284A8 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		976CBE361AD716C7004284A8 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		976CBE3A1AD71795004284A8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		976CBE3C1AD71D3D004284A8 /* main_comp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main_comp.cpp; sourceTree = "<group>"; };
+		976CBE3E1AD71D4F004284A8 /* icm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = icm.cpp; sourceTree = "<group>"; };
+		976CBE401AD71D58004284A8 /* data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = data.cpp; sourceTree = "<group>"; };
+		976CBE421AD71D63004284A8 /* bootstrap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bootstrap.cpp; sourceTree = "<group>"; };
+		976CBE441AD71DD9004284A8 /* icm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = icm.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		976CBE0E1AD71576004284A8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				976CBE3B1AD71795004284A8 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		976CBE081AD71576004284A8 = {
+			isa = PBXGroup;
+			children = (
+				976CBE131AD71576004284A8 /* compriskMacGui */,
+				976CBE3A1AD71795004284A8 /* Cocoa.framework */,
+				976CBE121AD71576004284A8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		976CBE121AD71576004284A8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				976CBE111AD71576004284A8 /* compriskMacGui.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		976CBE131AD71576004284A8 /* compriskMacGui */ = {
+			isa = PBXGroup;
+			children = (
+				976CBE161AD71576004284A8 /* AppDelegate.h */,
+				976CBE341AD716B8004284A8 /* AppDelegate.mm */,
+				976CBE1B1AD71576004284A8 /* Images.xcassets */,
+				976CBE1D1AD71577004284A8 /* MainMenu.xib */,
+				976CBE141AD71576004284A8 /* Supporting Files */,
+			);
+			path = compriskMacGui;
+			sourceTree = "<group>";
+		};
+		976CBE141AD71576004284A8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				976CBE151AD71576004284A8 /* Info.plist */,
+				976CBE361AD716C7004284A8 /* main.mm */,
+				976CBE3C1AD71D3D004284A8 /* main_comp.cpp */,
+				976CBE3E1AD71D4F004284A8 /* icm.cpp */,
+				976CBE441AD71DD9004284A8 /* icm.h */,
+				976CBE421AD71D63004284A8 /* bootstrap.cpp */,
+				976CBE401AD71D58004284A8 /* data.cpp */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		976CBE101AD71576004284A8 /* compriskMacGui */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 976CBE2E1AD71577004284A8 /* Build configuration list for PBXNativeTarget "compriskMacGui" */;
+			buildPhases = (
+				976CBE0D1AD71576004284A8 /* Sources */,
+				976CBE0E1AD71576004284A8 /* Frameworks */,
+				976CBE0F1AD71576004284A8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = compriskMacGui;
+			productName = compriskMacGui;
+			productReference = 976CBE111AD71576004284A8 /* compriskMacGui.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		976CBE091AD71576004284A8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = Piet;
+				TargetAttributes = {
+					976CBE101AD71576004284A8 = {
+						CreatedOnToolsVersion = 6.2;
+					};
+				};
+			};
+			buildConfigurationList = 976CBE0C1AD71576004284A8 /* Build configuration list for PBXProject "compriskMacGui" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 976CBE081AD71576004284A8;
+			productRefGroup = 976CBE121AD71576004284A8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				976CBE101AD71576004284A8 /* compriskMacGui */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		976CBE0F1AD71576004284A8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				976CBE1C1AD71576004284A8 /* Images.xcassets in Resources */,
+				976CBE1F1AD71577004284A8 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		976CBE0D1AD71576004284A8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				976CBE3D1AD71D3D004284A8 /* main_comp.cpp in Sources */,
+				976CBE3F1AD71D4F004284A8 /* icm.cpp in Sources */,
+				976CBE371AD716C7004284A8 /* main.mm in Sources */,
+				976CBE411AD71D58004284A8 /* data.cpp in Sources */,
+				976CBE431AD71D63004284A8 /* bootstrap.cpp in Sources */,
+				976CBE351AD716B8004284A8 /* AppDelegate.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		976CBE1D1AD71577004284A8 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				976CBE1E1AD71577004284A8 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		976CBE2C1AD71577004284A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		976CBE2D1AD71577004284A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		976CBE2F1AD71577004284A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = compriskMacGui/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		976CBE301AD71577004284A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "";
+				INFOPLIST_FILE = compriskMacGui/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		976CBE0C1AD71576004284A8 /* Build configuration list for PBXProject "compriskMacGui" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				976CBE2C1AD71577004284A8 /* Debug */,
+				976CBE2D1AD71577004284A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		976CBE2E1AD71577004284A8 /* Build configuration list for PBXNativeTarget "compriskMacGui" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				976CBE2F1AD71577004284A8 /* Debug */,
+				976CBE301AD71577004284A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 976CBE091AD71576004284A8 /* Project object */;
+}

@@ -1,0 +1,10 @@
+	B<-read.table("MLE.txt")
+	C<-read.table("SMLE.txt")
+		
+    plot(c(-100,-100),xlim=c(min(C[,1]),max(C[,1])), ylim=c(0,max(B[,2:4],C[,2:4])),main= "",ylab="",xlab="",bty="n",las=1)
+    lines(B[,1], B[,2],type="s",col="blue")
+   	lines(B[,1], B[,3],type="s",lty=2,col="red")
+   	lines(B[,1], B[,4],type="s",lty=3)
+   	lines(C[,1], C[,2])
+   	lines(C[,1], C[,3])
+   	lines(C[,1], C[,4])
