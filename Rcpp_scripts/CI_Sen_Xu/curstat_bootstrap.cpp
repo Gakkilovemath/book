@@ -247,7 +247,7 @@ List ComputeIntervals(DataFrame input)
                 MLE[i] = F[j];
         }
         if (jumploc[njumps]<= grid[i])
-            MLE[i]=1;
+            MLE[i]=F[njumps];
     }
     
     
