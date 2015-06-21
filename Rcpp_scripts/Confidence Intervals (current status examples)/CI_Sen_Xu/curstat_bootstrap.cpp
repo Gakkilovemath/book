@@ -55,7 +55,7 @@ List ComputeIntervals(DataFrame input)
     double          *Fsmooth,*Fsmooth2,*tt,**f3,*lowbound,*upbound,*f4;
     double          *cumw,*cs,*F,*F1,*F2,*jumploc,*y,*y2,*SMLE,*MLE,*MLE2;
     int             i,j,k,m,N,n,*delta,**freq,njumps,*delta2,*freq1,*freq2;
-    int             percentile1,percentile2,iter,ngrid=1000,NumIt=10000,npoints=100;
+    int             percentile1,percentile2,iter,ngrid=1000,NumIt=1000,npoints=100;
     clock_t         StartTime, StopTime;
     double          Time_bootstrap;
 
