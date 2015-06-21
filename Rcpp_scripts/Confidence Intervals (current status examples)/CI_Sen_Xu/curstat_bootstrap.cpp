@@ -71,6 +71,8 @@ List ComputeIntervals(DataFrame input)
     Rcout << "Piet Groeneboom & Geurt Jongbloed, Cambridge University Press, 2014." << std::endl << std::endl;
     Rcout << "The program produces (pointwise) 95% confidence intervals for the cdf," << std::endl;
     Rcout << "using the smooth bootstrap procedure proposed by Sen and Xu." << std::endl << std::endl;
+    Rcout << "See Sen and Xu, Model based bootstrap methods for interval censored data" << std::endl;
+    Rcout << "Computational Statistics & Data Analysis, 2015, Pages 121–129" << std::endl;
     Rcout << "The data set is the hepatitis A data set, provided to us by Niels Keiding." << std::endl;
     Rcout << "The program also computes the SMLE (blue curve, MLE is red)." << std::endl << std::endl;
     
