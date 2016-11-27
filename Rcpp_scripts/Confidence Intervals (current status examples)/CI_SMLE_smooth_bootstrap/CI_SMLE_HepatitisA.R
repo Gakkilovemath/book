@@ -1,6 +1,6 @@
 	library(Rcpp)
 	A<-read.table("hepatitis-A-data.txt") 
-	sourceCpp("curstat_bootstrapSMLE.cpp")
+	sourceCpp("curstat_smooth_bootstrap_HepatitisA.cpp")
   
 	output <- ComputeIntervals(A)
    

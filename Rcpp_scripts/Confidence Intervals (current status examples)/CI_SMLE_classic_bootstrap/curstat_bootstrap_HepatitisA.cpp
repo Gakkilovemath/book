@@ -21,6 +21,8 @@ using namespace std;
 using namespace Rcpp;
 
 
+#define SQR(x) ((x)*(x))
+
 typedef struct
 {
     double t;
@@ -41,7 +43,9 @@ int     CompareTime(const void *a, const void *b);
 int     compare(const void *a, const void *b);
 void    convexmin(int n, double cumw[], double cs[], double y[]);
 double  bdf(double A, double B,  int njumps, double *jumploc, double *p, double h, double u);
+double  K(double x);
 double  KK(double x);
+double  varF(int n, int m, int **freq, double *F, double A, double B, double t[], double h, double u);
 void    data_bootstrap(int N, int n, int *m, double x[], double x2[], double data2[], int **freq, int delta[], int delta2[]);
 
 // [[Rcpp::export]]
@@ -50,8 +54,8 @@ List ComputeIntervals(DataFrame input)
 {
     double          A,B,c,*data0,*data,*data1,*data2,*grid,*p,*p2,step,h;
     double          *tt,**f3,*lowbound,*upbound,*f4;
-    double          *cumw,*cs,*F,*F2,*jumploc,*y,*y2,*SMLE,*SMLE2;
-    int             i,j,k,m,N,n,*delta,**freq,njumps,*delta2,*freq1,*freq2;
+    double          *cumw,*cs,*F,*F2,*jumploc,*y,*y2,*SMLE,*SMLE2,*cc;
+    int             i,j,k,m,m2,N,n,*delta,njumps,*delta2,*freq1,*freq2,**frequence1,**frequence2;
     int             percentile1,percentile2,iter,ngrid=1000,NumIt=1000,npoints=100;
     clock_t         StartTime, StopTime;
     double          Time_bootstrap;
@@ -68,7 +72,7 @@ List ComputeIntervals(DataFrame input)
     Rcout << "Piet Groeneboom & Geurt Jongbloed, Cambridge University Press, 2014." << std::endl << std::endl;
     Rcout << "The program produces the (naive) bootstrap (pointwise) 95% confidence intervals for the cdf," << std::endl;
     Rcout << "using the SMLE." << std::endl << std::endl;
-    Rcout << "The data set is the hepatitis A data set, provided to us by Niels Keiding." << std::endl;
+    Rcout << "The data set is the Rubella set, provided to us by Niels Keiding." << std::endl;
     Rcout << "The program also computes the SMLE (blue curve, MLE is red)." << std::endl << std::endl;
     
     
@@ -159,17 +163,25 @@ List ComputeIntervals(DataFrame input)
     
     SMLE= new double[ngrid+1];
     SMLE2= new double[ngrid+1];
-    p= new double[n+1];
-    p2= new double[n+1];
+    cc = new double[ngrid+1];
+    p = new double[n+1];
+    p2 = new double[n+1];
     
-    freq = new int*[2];
+    frequence1 = new int*[2];
     for (i=0;i<2;i++)
-        freq[i] = new int[n+1];
+        frequence1[i] = new int[n+1];
+    
+    frequence2 = new int*[2];
+    for (i=0;i<2;i++)
+        frequence2[i] = new int[n+1];
     
     f3  = new double*[NumIt+1];
     
     for (iter=0;iter<NumIt+1;iter++)
         f3[iter] = new double[npoints];
+    
+    for (i=1;i<=ngrid;i++)
+            cc[i]=0.5+1.5*grid[i]/grid[ngrid];
     
     
     F[0]=F2[0]=0;
@@ -183,6 +195,8 @@ List ComputeIntervals(DataFrame input)
     {
         cs[i]=cs[i-1]+(double)freq1[i];
         cumw[i]=cumw[i-1]+(double)freq2[i];
+        frequence1[1][i]=freq1[i];
+        frequence1[0][i]=freq2[i]-freq1[i];
     }
     
     
@@ -215,12 +229,12 @@ List ComputeIntervals(DataFrame input)
 
     
     // bandwidth for SMLE
-    h = c*pow(N,-1.0/4);
+    h = c*pow(N,-1.0/5);
     
     SMLE[0]=0;
     
     for (i=1;i<=ngrid;i++)
-        SMLE[i]=bdf(A,B,njumps,jumploc,p,grid[i],h);
+        SMLE[i]=bdf(A,B,njumps,jumploc,p,grid[i],cc[i]*h);
     
     NumericMatrix out2 = NumericMatrix(ngrid+1,2);
     
@@ -233,12 +247,12 @@ List ComputeIntervals(DataFrame input)
     
     for (iter=0;iter<NumIt;iter++)
     {
-        data_bootstrap(N,n,&m,data,tt,data1,freq,delta,delta2);
+        data_bootstrap(N,n,&m,data,tt,data1,frequence2,delta,delta2);
         
         for (i=1;i<=m;i++)
         {
-            cs[i]=cs[i-1]+(double)freq[1][i];
-            cumw[i]=cumw[i-1]+(double)(freq[0][i]+freq[1][i]);
+            cs[i]=cs[i-1]+(double)frequence2[1][i];
+            cumw[i]=cumw[i-1]+(double)(frequence2[0][i]+frequence2[1][i]);
         }
         
         convexmin(m,cumw,cs,y2);
@@ -257,15 +271,19 @@ List ComputeIntervals(DataFrame input)
             }
         }
         
-        m=j;
+        m2=j;
         
         SMLE2[0]=0;
         
         for (i=1;i<=ngrid;i++)
-            SMLE2[i]=bdf(A,B,m,data2,p2,grid[i],h);
+            SMLE2[i]=bdf(A,B,m2,data2,p2,grid[i],cc[i]*h);
         
         for (i=1;i<npoints;i++)
-            f3[iter][i]=SMLE2[10*i]-SMLE[10*i];
+            f3[iter][i]=(SMLE2[10*i]-SMLE[10*i])/sqrt(varF(N,m,frequence2,y2,0.0,B,data1,cc[10*i]*h,grid[10*i]));
+        
+        //alternatively, one can use non-Studentized intervals:
+        //for (i=1;i<npoints;i++)
+        //f3[iter][i]=SMLE2[10*i]-SMLE[10*i];
         
     }
     
@@ -284,8 +302,12 @@ List ComputeIntervals(DataFrame input)
         
         qsort(f4,NumIt,sizeof(double),compare);
         
-        lowbound[i]= fmax(0,SMLE[10*i]-f4[percentile2-1]);
-        upbound[i]= fmin(1,SMLE[10*i]-f4[percentile1-1]);
+        lowbound[i]= SMLE[10*i]-f4[percentile2-1]*sqrt(varF(N,n,frequence1,y,0.0,B,data0,cc[10*i]*h,grid[10*i]));
+        upbound[i]= SMLE[10*i]-f4[percentile1-1]*sqrt(varF(N,n,frequence1,y,0.0,B,data0,cc[10*i]*h,grid[10*i]));
+        
+        //alternatively, one can use non-Studentized intervals:
+        //lowbound[i]= fmax(0,SMLE[10*i]-f4[percentile2-1]);
+        //upbound[i]= fmin(1,SMLE[10*i]-f4[percentile1-1]);
     }
     
     Rcout << std::endl << std::endl;
@@ -296,8 +318,8 @@ List ComputeIntervals(DataFrame input)
     for (i=0;i<npoints-1;i++)
     {
         out3(i,0)=grid[10*(i+1)];
-        out3(i,1)=lowbound[i+1];
-        out3(i,2)=upbound[i+1];
+        out3(i,1)=fmax(lowbound[i+1],0);
+        out3(i,2)=fmin(upbound[i+1],1);
     }
 
     
@@ -357,14 +379,21 @@ List ComputeIntervals(DataFrame input)
     
     // free memory
     
-    delete[] data, delete[] delta, delete[] tt, delete[] delta2, delete[] SMLE, delete[] SMLE2,
+    delete[] data0, delete[] freq1, delete[] freq2,
+    delete[] data, delete[] delta, delete[] tt, delete[] delta2,
     delete[] F, delete[] F2, delete[] cumw, delete[] cs, delete[] y, delete[] y2,
-    delete[] jumploc,  delete[] data0, delete[] data1, delete[] data2, delete[] p, delete[] p2,
-    delete[] lowbound, delete[] upbound;
+    delete[] jumploc, delete[] data1, delete[] data2, delete[] SMLE, delete[] SMLE2,
+    delete[] cc, delete[] p, delete[] p2;
     
     for (i = 0;i<2;i++)
-        delete[] freq[i];
-    delete[] freq;
+        delete[] frequence1[i];
+    delete[] frequence1;
+    
+    for (i = 0;i<2;i++)
+        delete[] frequence2[i];
+    delete[] frequence2;
+
+    delete[] lowbound, delete[] upbound, delete[] f4;
     
     for (iter = 0;iter < NumIt;iter++)
         delete[] f3[iter];
@@ -469,6 +498,43 @@ int CompareTime(const void *a, const void *b)
     if ((*(SampleTime *) a).t > (*(SampleTime *) b).t)
         return 1;
     return 0;
+}
+
+double K(double x)
+{
+    double u,y;
+    
+    u=x*x;
+    
+    if (u<=1)
+        y=(35.0/32)*pow(1-u,3);
+    else
+        y=0.0;
+    
+    return y;
+}
+
+double varF(int n, int m, int **freq, double *F, double A, double B, double t[], double h, double u)
+{
+    int			i;
+    double		t1,t2,t3,sum;
+    
+    sum=0;
+    
+    for (i=1;i<=m;i++)
+    {
+        t1=(u-t[i])/h;
+        t2=(u+t[i]-2*A)/h;
+        t3=(2*B-u-t[i])/h;
+        
+        sum += SQR(K(t1)-K(t2)-K(t3))*(SQR(F[i]-1)*freq[1][i]+SQR(F[i])*freq[0][i]);
+    }
+    
+    sum /= n;
+    
+    //sum -= SQR(sum1/n);
+    
+    return sum;
 }
 
 

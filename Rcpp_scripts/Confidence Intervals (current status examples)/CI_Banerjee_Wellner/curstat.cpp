@@ -44,11 +44,12 @@ List ComputeIntervals(DataFrame input)
     
     Rcpp::Rcout << std::endl;
     Rcpp::Rcout << "Piet Groeneboom 2015" << std::endl << "For further information see:" << std::endl;
-    Rcpp::Rcout << "Nonparametric Estimation under Shape Constraints, pp. 8-10 and Section 9.5," << std::endl;
+    Rcpp::Rcout << "Nonparametric Estimation under Shape Constraints." << std::endl;
     Rcpp::Rcout << "Piet Groeneboom & Geurt Jongbloed, Cambridge University Press, 2014." << std::endl << std::endl;
     Rcpp::Rcout << "The program produces LR test based (pointwise) 95% confidence intervals for the cdf," << std::endl;
-     Rcpp::Rcout << "using the procedure proposed by Banerjee and Wellner." << std::endl << std::endl;
-    Rcpp::Rcout << "The data set is the hepatitis A data set, provided to us by Niels Keiding." << std::endl;
+    Rcpp::Rcout << "using the procedure proposed by Banerjee and Wellner." << std::endl << std::endl;
+    Rcpp::Rcout << "See Banerjee, M. and Wellner, J.A, Confidence Intervals for current status data," << std::endl;
+    Rcpp::Rcout << "Scandinavian Journal of Statistics, 32, 405-424." << std::endl << std::endl;
     Rcpp::Rcout << "The program also computes the SMLE (blue curve, MLE is red)." << std::endl << std::endl;
     
     

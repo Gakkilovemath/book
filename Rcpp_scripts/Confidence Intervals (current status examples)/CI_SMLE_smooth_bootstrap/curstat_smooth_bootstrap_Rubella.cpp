@@ -1,9 +1,9 @@
 //
-//  main.cpp
-//  trial
+//  curstat_smooth_bootstrapSMLE.cpp
+//  CI_SMLE_smoothbootstrap
 //
-//  Created by Piet on 22/05/15.
-//  Copyright (c) 2015 Piet. All rights reserved.
+//  Created by Piet Groeneboom on 22/05/15.
+//  Copyright (c) 2015 Piet Groeneboom. All rights reserved.
 //
 
 
@@ -14,10 +14,10 @@
 #include <time.h>
 #include <fstream>
 #include <string.h>
-//#include <chrono>
-//#include <random>
 #include <Rcpp.h>
 
+
+#define SQR(x) ((x)*(x))
 
 using namespace std;
 using namespace Rcpp;
@@ -43,36 +43,39 @@ int     CompareTime(const void *a, const void *b);
 int     compare(const void *a, const void *b);
 void    convexmin(int n, double cumw[], double cs[], double y[]);
 double  bdf(double A, double B,  int njumps, double *jumploc, double *p, double h, double u);
+double  bdf_conv(double B, int m, double data[], double p[], double u, double h);
+double  K(double x);
 double  KK(double x);
+double  KK2(double x);
+double  varF(int N, int n, int **freq, double *F, double A, double B, double t[], double h, double u);
 void    data_binom(int N, int n, double data[], int delta2[], int **freq, double F[]);
-
 
 // [[Rcpp::export]]
 
 List ComputeIntervals(DataFrame input)
 {
-    double          A,B,c,*data,*data1,*data2,*grid,*p,*p2,step,h;
-    double          *Fsmooth,*Fsmooth2,*tt,**f3,*lowbound,*upbound,*f4;
-    double          *cumw,*cs,*F,*F1,*F2,*jumploc,*y,*y2,*SMLE,*MLE,*MLE2;
-    int             i,j,k,m,N,n,*delta,**freq,njumps,*delta2,*freq1,*freq2;
+    double          A,B,c,*data0,*data,*data1,*data2,*grid,*p,*p2,step,h;
+    double          *tt,**f3,*lowbound,*upbound,*f4;
+    double          *cumw,*cs,*F,*F2,*jumploc,*y,*y2,*SMLE,*SMLE1,*SMLE2,*Fsmooth,*cc,*cc1;
+    int             i,j,k,m,N,n,*delta,njumps,*delta2,*freq1,*freq2,**frequence1,**frequence2;
     int             percentile1,percentile2,iter,ngrid=1000,NumIt=1000,npoints=100;
     clock_t         StartTime, StopTime;
     double          Time_bootstrap;
 
     
     DataFrame DF = Rcpp::DataFrame(input);
-    NumericVector data0 = DF["V1"];
+    NumericVector xx = DF["V1"];
     IntegerVector freq01 = DF["V2"];
     IntegerVector freq02 = DF["V3"];
     
     Rcout << std::endl;
     Rcout << "Piet Groeneboom 2015" << std::endl << "For further information see:" << std::endl;
+    Rcout << "Nonparametric Estimation under Shape Constraints, Section 2.3," << std::endl;
     Rcout << "Piet Groeneboom & Geurt Jongbloed, Cambridge University Press, 2014." << std::endl << std::endl;
-    Rcout << "The program produces (pointwise) 95% confidence intervals for the cdf," << std::endl;
-    Rcout << "using the SMLE in the smooth bootstrap procedure proposed by Sen and Xu." << std::endl << std::endl;
-    Rcout << "See Sen and Xu, Model based bootstrap methods for interval censored data" << std::endl;
-    Rcout << "Computational Statistics & Data Analysis, 2015, Pages 121–129" << std::endl;
-    Rcout << "The program also computes the SMLE (blue curve, MLE is red)." << std::endl << std::endl;
+    Rcout << "The program produces smooth bootstrap based (pointwise) 95% confidence intervals for the cdf," << std::endl;
+    Rcout << "using resampling from the SMLE." << std::endl << std::endl;
+    Rcout << "The data set is the Rubella data set." << std::endl;
+    Rcout << "The program also computes the MLE (red curve, SMLE is blue)." << std::endl << std::endl;
     
     
     // determine the number of rows of the data frame
@@ -80,7 +83,7 @@ List ComputeIntervals(DataFrame input)
     percentile1=(int)(0.025*NumIt);
     percentile2=(int)(0.975*NumIt);
     
-    n = (int)data0.size();
+    n = (int)xx.size();
     
     Rcout << "Number of unique observations:" << std::setw(7) << n << std::endl << std::endl;
     Rcout << "Number of bootstrap samples:" << std::setw(10) << NumIt << std::endl;
@@ -88,25 +91,22 @@ List ComputeIntervals(DataFrame input)
     Rcout << "percentile1: " <<  std::setw(7) << percentile1 << std::endl;
     Rcout << "percentile2: " <<  std::setw(7) << percentile2 << std::endl;
     
+    data0= new double[n+1];
+    freq1= new int[n+1];
+    freq2= new int[n+1];
     
-    
-    data= new double[n+1];
-    freq1 = new int[n+1];
-    freq2 = new int[n+1];
+    data0[0]=0;
     
     for (i=1;i<=n;i++)
     {
-        data[i]=(double)data0[i-1];
-        freq1[i]=(int)freq01[i-1];
-        freq2[i]=(int)freq02[i-1];
+      data0[i]=(double)xx[i-1];
+      freq1[i]=(int)freq01[i-1];
+      freq2[i]=(int)freq02[i-1];
     }
- 
     
-    A = 0.0;
-    B = data[n];
-    c=B-A;
-    
-    data[0]=0;
+    A = 0;
+    B = data0[n];
+    c= B-A;
     
     step = (B-A)/ngrid;
     
@@ -129,10 +129,16 @@ List ComputeIntervals(DataFrame input)
     delta = new int[N+1];
     tt=new double[N+1];
     delta2 = new int[N+1];
+    cc = new double[ngrid+1];
     
-    
-    data[0]=0;
-    
+    for (i=1;i<=ngrid;i++)
+    {
+        if (grid[i]<=20)
+            cc[i]=0.25+grid[i]/grid[ngrid];
+        else
+            cc[i]=cc[i-1]+2.5*(grid[i]-grid[i-1])/grid[ngrid];
+    }
+  
     j=0;
     
     for (i=1;i<=n;i++)
@@ -142,7 +148,7 @@ List ComputeIntervals(DataFrame input)
             j++;
             data[j]=data0[i];
             delta[j]=1;
-
+            
         }
         for (k=1;k<=freq2[i]-freq1[i];k++)
         {
@@ -154,7 +160,6 @@ List ComputeIntervals(DataFrame input)
     
     
     F= new double[n+1];
-    F1= new double[N+1];
     F2= new double[n+1];
     cumw= new double[n+1];
     cs= new double[n+1];
@@ -163,18 +168,22 @@ List ComputeIntervals(DataFrame input)
     jumploc= new double[n+1];
     data1= new double[n+1];
     data2= new double[n+1];
-    
-    Fsmooth= new double[ngrid+1];
-    Fsmooth2= new double[ngrid+1];
+    cc1 = new double[N+1];
+ 
+    Fsmooth = new double[N+1];
     SMLE= new double[ngrid+1];
+    SMLE1= new double[ngrid+1];
+    SMLE2= new double[ngrid+1];
     p= new double[n+1];
     p2= new double[n+1];
-    MLE= new double[ngrid+1];
-    MLE2= new double[ngrid+1];
     
-    freq = new int*[2];
+    frequence1 = new int*[2];
     for (i=0;i<2;i++)
-        freq[i] = new int[n+1];
+        frequence1[i] = new int[n+1];
+    
+    frequence2 = new int*[2];
+    for (i=0;i<2;i++)
+        frequence2[i] = new int[n+1];
     
     f3  = new double*[NumIt+1];
     
@@ -182,7 +191,7 @@ List ComputeIntervals(DataFrame input)
         f3[iter] = new double[npoints];
     
     
-    F[0]=F1[0]=F2[0]=0;
+    F[0]=F2[0]=0;
     cumw[0]=cs[0]=0;
     
     y[0]=y2[0]=0;
@@ -193,15 +202,16 @@ List ComputeIntervals(DataFrame input)
     {
         cs[i]=cs[i-1]+(double)freq1[i];
         cumw[i]=cumw[i-1]+(double)freq2[i];
+        frequence1[1][i]=freq1[i];
+        frequence1[0][i]=freq2[i]-freq1[i];
     }
-
+    
     
     convexmin(n,cumw,cs,y);
     
-    jumploc[0]=0;
-    F[0]=0;
-    
     j=0;
+    
+    jumploc[0]=0;
     
     for (i=1;i<=n;i++)
     {
@@ -220,47 +230,59 @@ List ComputeIntervals(DataFrame input)
     
     for (i=0;i<=njumps;i++)
     {
-      out1(i,0)=jumploc[i];
-      out1(i,1) = F[i];
+        out1(i,0)=jumploc[i];
+        out1(i,1) = F[i];
     }
-    
+
     
     // bandwidth for SMLE
     h = c*pow(N,-1.0/5);
-
-    
-    for (i=1;i<=N;i++)
-        F1[i]=bdf(A,B,njumps,jumploc,p,data[i],h);
     
     SMLE[0]=0;
     
     for (i=1;i<=ngrid;i++)
-        SMLE[i]=bdf(A,B,njumps,jumploc,p,grid[i],h);
+        SMLE[i]=bdf(A,B,njumps,jumploc,p,grid[i],cc[i]*h);
+    
+    for (i=1;i<=ngrid;i++)
+        SMLE1[i]=bdf_conv(B,njumps,jumploc,p,grid[i],cc[i]*h);
+    
+    NumericMatrix out2 = NumericMatrix(ngrid+1,2);
     
     for (i=0;i<=ngrid;i++)
     {
-        if (0<= grid[i] && grid[i]<jumploc[1])
-            MLE[i]=0;
-        for (j=1;j<njumps;j++)
-        {
-            if (jumploc[j]<= grid[i] && grid[i]<jumploc[j+1])
-                MLE[i] = F[j];
-        }
-        if (jumploc[njumps]<= grid[i])
-            MLE[i]=F[njumps];
+        out2(i,0)=grid[i];
+        out2(i,1) = SMLE[i];
     }
     
+    j=0;
+    
+    for (i=1;i<=n;i++)
+    {
+        for (k=1;k<=freq2[i];k++)
+        {
+            j++;
+            if (data0[i]<=20)
+                cc1[j]=0.25+data0[i]/data0[n];
+            else
+                cc1[j]=cc1[j-1]+2.5*(data0[i]-data0[i-1])/grid[ngrid];
+        }
+    }
+
+    
+    for (i=1;i<=N;i++)
+        Fsmooth[i]=bdf(A,B,njumps,jumploc,p,data[i],cc1[i]*h);
+
     
     for (iter=0;iter<NumIt;iter++)
     {
-        data_binom(N,n,data,delta2,freq,F1);
+        data_binom(N,n,data,delta2,frequence2,Fsmooth);
         
         cumw[0]=cs[0]=0;
         
         for (i=1;i<=n;i++)
         {
-            cs[i]=cs[i-1]+(double)freq[1][i];
-            cumw[i]=cumw[i-1]+(double)(freq[0][i]+freq[1][i]);
+            cs[i]=cs[i-1]+(double)frequence2[1][i];
+            cumw[i]=cumw[i-1]+(double)(frequence2[0][i]+frequence2[1][i]);
         }
         
         convexmin(n,cumw,cs,y2);
@@ -279,23 +301,19 @@ List ComputeIntervals(DataFrame input)
         }
         
         m=j;
-    
         
-        for (i=0;i<=ngrid;i++)
-        {
-            if (grid[i]<data2[1])
-                MLE2[i]=0;
-            for (j=1;j<m;j++)
-            {
-                if (data2[j]<= grid[i] && grid[i]<data2[j+1])
-                    MLE2[i] = F2[j];
-            }
-            if (data2[m]<= grid[i])
-                MLE2[i]=F2[m];
-        }
+        SMLE2[0]=0;
+        
+        for (i=1;i<=ngrid;i++)
+            SMLE2[i]=bdf(A,B,m,data2,p2,grid[i],cc[i]*h);
+        
         
         for (i=1;i<npoints;i++)
-            f3[iter][i]=MLE2[10*i]-SMLE[10*i];
+            f3[iter][i]=(SMLE2[10*i]-SMLE1[10*i])/sqrt(varF(N,n,frequence2,y2,0,B,data0,cc[10*i]*h,grid[10*i]));
+        
+        // alternatively, one can use non-Studentized intervals:
+        //for (i=1;i<npoints;i++)
+            //f3[iter][i]=SMLE2[10*i]-SMLE1[10*i];
     }
     
     StopTime  = clock();
@@ -313,16 +331,29 @@ List ComputeIntervals(DataFrame input)
         
         qsort(f4,NumIt,sizeof(double),compare);
         
-        lowbound[i]= fmax(0,MLE[10*i]-f4[percentile2-1]);
-        upbound[i]= fmin(1,MLE[10*i]-f4[percentile1-1]);
+        lowbound[i]= SMLE[10*i]-f4[percentile2-1]*sqrt(varF(N,n,frequence1,y,0,B,data0,cc[10*i]*h,grid[10*i]));
+        upbound[i] = SMLE[10*i]-f4[percentile1-1]*sqrt(varF(N,n,frequence1,y,0,B,data0,cc[10*i]*h,grid[10*i]));
+        
+        // alternatively, one can use non-Studentized intervals:
+        //lowbound[i]= SMLE[10*i]-f4[percentile2-1];
+        //upbound[i] = SMLE[10*i]-f4[percentile1-1];
+        
     }
-    
     
     
     Rcout << std::endl << std::endl;
     Rcout << "The computations took    " << setprecision(10) << Time_bootstrap << "   seconds"  << std::endl;
     
+    NumericMatrix out3 = NumericMatrix(npoints-1,3);
+    
+    for (i=0;i<npoints-1;i++)
+    {
+        out3(i,0)=grid[10*(i+1)];
+        out3(i,1)=lowbound[i+1];
+        out3(i,2)=upbound[i+1];
+    }
 
+    
     ofstream file0_("MLE.txt");
     
     if (file0_.is_open())
@@ -339,20 +370,8 @@ List ComputeIntervals(DataFrame input)
         file0_.close();
     }
     
-    // determination of the bandwidth of the SMLE and density using a simple rule of thumb
     
-    
-    Rcout << std::endl << std::endl;
-    
-    Rcout << "Sorting results of bootstrap" << std::endl << std::endl;
-    
-    Rcout << "Forming output with SMLE" << std::endl;
-    
-    NumericMatrix out2 = NumericMatrix(ngrid+1,2);
-    
-    // computation of the SMLE
-    
-    ofstream file_("CI_Sen_Xu.txt");
+    ofstream file_("CI_SMLE.txt");
     
     if (file_.is_open())
     {
@@ -371,7 +390,7 @@ List ComputeIntervals(DataFrame input)
     
     if (file1_.is_open())
     {
-        for (i=0;i<=ngrid;i++)
+        for (i=1;i<=ngrid;i++)
         {
             file1_ << setprecision(10) << setw(20) << grid[i];
             file1_ << setprecision(11) <<  setw(20) << SMLE[i];
@@ -380,51 +399,38 @@ List ComputeIntervals(DataFrame input)
         file1_.close();
     }
     
-    
-    for (i=0;i<=ngrid;i++)
-    {
-        out2(i,0)=grid[i];
-        out2(i,1) = SMLE[i];
-    }
-    
-    Rcout << "Forming matrix with confidence intervals" << std::endl;
-    
-    NumericMatrix out3 = NumericMatrix(npoints-1,3);
-    
-    for (i=0;i<npoints-1;i++)
-    {
-        out3(i,0)=grid[10*(i+1)];
-        out3(i,1)=lowbound[i+1];
-        out3(i,2)=upbound[i+1];
-    }
+    Rcout << std::endl;
     
     Rcout << "Making output list" << std::endl;
     
-    // make the list for the output, containing the MLE, hazard, the bootstrap confidence intervals and -log likelihood
+    // make the list for the output, containing the MLE, SMLE and the bootstrap confidence intervals
     
-    List out = List::create(Rcpp::Named("MLE")=out1,Rcpp::Named("SMLE")=out2,Rcpp::Named("CI_Sen_Xu")=out3);
-    
-    
-    Rcout << "Freeing memory" << std::endl;
+    List out = List::create(Rcpp::Named("MLE")=out1,Rcpp::Named("SMLE")=out2,Rcpp::Named("CI_SMLE")=out3);
+
     
     // free memory
     
-    delete[] data, delete[] delta, delete[] freq1, delete[] freq2, delete[] tt, delete[] delta2,
-    delete[] F, delete[] F1, delete[] F2, delete[] cumw,
-    delete[] cs, delete[] y, delete[] y2, delete[] jumploc,  delete[] data1, delete[] data2,
-    delete[] Fsmooth,  delete[] p, delete[] p2, delete[] lowbound, delete[] upbound;
+    delete[] data0, delete[] freq1, delete[] freq2,
+    delete[] data, delete[] delta, delete[] tt, delete[] delta2,
+    delete[] F, delete[] F2, delete[] cumw, delete[] cs, delete[] y, delete[] y2,
+    delete[] jumploc, delete[] data1, delete[] data2, delete[] Fsmooth,
+    delete[] SMLE, delete[] SMLE1, delete[] SMLE2, delete[] cc, delete[] cc1, delete[] p, delete[] p2;
     
     for (i = 0;i<2;i++)
-        delete[] freq[i];
-    delete[] freq;
+        delete[] frequence1[i];
+    delete[] frequence1;
+    
+    for (i = 0;i<2;i++)
+        delete[] frequence2[i];
+    delete[] frequence2;
+    
+    delete[] lowbound, delete[] upbound, delete[] f4;
     
     for (iter = 0;iter < NumIt;iter++)
         delete[] f3[iter];
     delete[] f3;
     
     return out;
-    
-    return 0;
 }
 
 
@@ -450,6 +456,43 @@ void convexmin(int n, double cumw[], double cs[], double y[])
             }
         }
     }
+}
+
+double K(double x)
+{
+    double u,y;
+    
+    u=x*x;
+    
+    if (u<=1)
+        y=(35.0/32)*pow(1-u,3);
+    else
+        y=0.0;
+    
+    return y;
+}
+
+
+double varF(int N, int n, int **freq, double *F, double A, double B, double t[], double h, double u)
+{
+    int			i;
+    double		t1,t2,t3,sum;
+    
+    
+    sum=0;
+    
+    for (i=1;i<=n;i++)
+    {
+        t1=(u-t[i])/h;
+        t2=(u+t[i]-2*A)/h;
+        t3=(2*B-u-t[i])/h;
+        
+        sum += SQR(K(t1)-K(t2)-K(t3))*(SQR(F[i]-1)*freq[1][i]+SQR(F[i])*freq[0][i]);
+    }
+    
+    sum = sum/N;
+    
+    return sum;
 }
 
 double KK(double x)
@@ -485,9 +528,54 @@ double bdf(double A, double B, int m, double t[], double p[], double u, double h
         t2=(u+t[k]-2*A)/h;
         t3=(2*B-u-t[k])/h;
         sum+= (KK(t1)+KK(t2)-KK(t3))*p[k];
-        //sum+= KK(t1)*p[k];
     }
-    return fmax(0,sum);
+    return sum;
+}
+
+double KK2(double x)
+{
+    double y;
+    
+    y=0;
+    
+    if (x<=-2)
+        y=0;
+    
+    if (x>=2)
+        y=1;
+    
+    if (x>-2 && x<0)
+        y=pow(2.0 + x,8)*(6864 - 16256*x + 16976*SQR(x) - 9440*pow(x,3) + 2690*pow(x,4) - 400*pow(x,5) + 25*pow(x,6))/3514368.0;
+    
+    
+    if (x>=0 && x<2)
+        y = 0.5 + 350*x/429.0 - 35*pow(x,3)/66.0 + 7*pow(x,5)/24.0 - 5*pow(x,7)/32.0 + 35*pow(x,8)/512.0 - 7*pow(x,10)/1536.0 + 35*pow(x,12)/135168.0 - 25*pow(x,14)/3514368.0;
+    
+    if (x==2)
+        y = (1.0/32)*(70*pow(x,4) - 84*pow(x,5) + 35*pow(x,6) - 5*pow(x,7));
+    
+    return y;
+}
+
+double bdf_conv(double B, int m, double data[], double p[], double u, double h)
+{
+    int			i;
+    double		t1,t2,t3,sum;
+    
+    
+    sum=0;
+    
+    for (i=1;i<=m;i++)
+    {
+        t1=(u-data[i])/h;
+        t2=(u+data[i])/h;
+        t3=(2*B-u-data[i])/h;
+        
+        sum+= (KK2(t1)+KK2(t2)-KK2(t3))*p[i];
+        
+    }
+    
+    return sum;
 }
 
 
@@ -523,8 +611,8 @@ void data_binom(int N, int n, double data[], int delta2[], int **freq, double F[
         for (j=0;j<=n;j++)
             freq[i][j]=0;
     }
-  
-
+    
+    
     for (i=1;i<=N;i++)
     {
         j = rand();
@@ -549,45 +637,4 @@ void data_binom(int N, int n, double data[], int delta2[], int **freq, double F[
             freq[delta2[i]][j]++;
     }
 }
-
-
-
-/* void data_binom(int N, int n, double data[], int delta2[], int **freq, double F[])
-{
-    int	i,j;
-    double x;
-    
-    for (i=0;i<2;i++)
-    {
-        for (j=0;j<=n;j++)
-            freq[i][j]=0;
-    }
-    
-    std::random_device rd;
-    std::mt19937_64 gen(rd());
-    std::uniform_real_distribution<> dis(0,1);
-    
-    for (i=1;i<=N;i++)
-    {
-        x= dis(gen);
-        
-        if (x<=F[i])
-            delta2[i]=1;
-        else
-            delta2[i]=0;
-    }
-    
-    j=0;
-    
-    for (i=1;i<=N;i++)
-    {
-        if (data[i]>data[i-1])
-        {
-            j++;
-            freq[delta2[i]][j]=1;
-        }
-        else
-            freq[delta2[i]][j]++;
-    }
-}*/
 

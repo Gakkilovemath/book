@@ -1,12 +1,12 @@
 	library(Rcpp)
-	A<-read.table("hepatitis-A-data.txt") 
-	sourceCpp("curstat_bootstrapSMLE.cpp")
+	A<-read.table("Rubella.txt") 
+	sourceCpp("curstat_bootstrap.cpp")
   
 	output <- ComputeIntervals(A)
    
 	B <- output$MLE
 	C <- output$SMLE
-	D <- output$CI_SMLE
+	D <- output$CI_Sen_Xu
   
    x1<-B[,1]
    z1<-B[,2]

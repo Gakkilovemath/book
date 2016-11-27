@@ -1,12 +1,12 @@
 	library(Rcpp)
-	A<-read.table("hepatitis-A-data.txt") 
-	sourceCpp("curstat_bootstrap.cpp")
+	A<-read.table("Rubella.txt") 
+	sourceCpp("curstat.cpp")
   
 	output <- ComputeIntervals(A)
    
 	B <- output$MLE
 	C <- output$SMLE
-	D <- output$CI_Sen_Xu
+	D <- output$CI_Banerjee_Wellner
   
    x1<-B[,1]
    z1<-B[,2]
@@ -18,7 +18,7 @@
    
    plot(c(-100,-100),xlim=c(0,max(x1)), ylim=c(0,max(u1)), main= "",ylab="",xlab="",bty="n",las=1)
    lines(x1,z1,lwd=2,type ="s",col="red")
-   lines(x2, z2,lwd=2,col="blue")
+   #lines(x2, z2,lwd=2,col="blue")
    segments(x3,t1,x3,u1)
 
    
