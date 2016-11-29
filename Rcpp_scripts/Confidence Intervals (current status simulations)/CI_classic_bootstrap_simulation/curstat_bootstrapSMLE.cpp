@@ -63,7 +63,7 @@ List ComputeIntervals()
 {
     double          A,B,c,*data,*data1,*data2,*grid,*p,*p2,step,h;
     double          *data0,*tt,*lowbound,*upbound;
-    double          *cumw,*cs,*F,*F2,*jumploc,*y,*y2,*SMLE,*SMLE2;
+    double          *cumw,*cs,*F,*F2,*jumploc,*y,*y2,*SMLE,*SMLE2,*cc;
     double          **f3,*f4;
     int             i,j,m,m2,n,*delta,*delta2,**freq,**freq2,njumps;
     int             iter,iter2,ngrid,NumIt,NumIt2,npoints;
@@ -131,6 +131,7 @@ List ComputeIntervals()
     
     SMLE= new double[ngrid+1];
     SMLE2= new double[ngrid+1];
+    cc = new double[ngrid+1];
     
     freq = new int*[2];
     for (i=0;i<=1;i++)
@@ -146,6 +147,9 @@ List ComputeIntervals()
     
     for (iter2=0;iter2<NumIt2+1;iter2++)
         f3[iter2] = new double[npoints];
+    
+    for (i=1;i<=ngrid;i++)
+            cc[i]=0.5+0.5*grid[i]/grid[ngrid];
     
     lowbound=new double[npoints];
     upbound=new double[npoints];
@@ -245,7 +249,7 @@ List ComputeIntervals()
             
             
             for (i=1;i<npoints;i++)
-                f3[iter2][i]=(SMLE2[10*i]-SMLE[10*i])/sqrt(varF(n,m,freq2,y2,0.0,B,data1,h,grid[10*i]));
+                f3[iter2][i]=(SMLE2[10*i]-SMLE[10*i])/sqrt(varF(n,m,freq2,y2,0.0,B,data1,cc[10*i]*h,grid[10*i]));
         }
         
         for (i=1;i<npoints;i++)
@@ -255,8 +259,8 @@ List ComputeIntervals()
             
             qsort(f4,NumIt2,sizeof(double),compare);
             
-            lowbound[i]= SMLE[10*i]-bias(grid[10*i],h)-f4[above]*sqrt(varF(n,n,freq,y,0.0,B,data,h,grid[10*i]));
-            upbound[i]= SMLE[10*i]-bias(grid[10*i],h)-f4[below]*sqrt(varF(n,n,freq,y,0.0,B,data,h,grid[10*i]));
+            lowbound[i]= SMLE[10*i]-bias(grid[10*i],h)-f4[above]*sqrt(varF(n,n,freq,y,0.0,B,data,cc[10*i]*h,grid[10*i]));
+            upbound[i]= SMLE[10*i]-bias(grid[10*i],h)-f4[below]*sqrt(varF(n,n,freq,y,0.0,B,data,cc[10*i]*h,grid[10*i]));
             
             if (F0(grid[i*10])<lowbound[i] || F0(grid[i*10])>upbound[i])
                 percentage[i]++;
@@ -381,7 +385,7 @@ List ComputeIntervals()
     delete[] data, delete[] delta, delete[] tt, delete[] delta2, delete[] SMLE, delete[] SMLE2,
     delete[] F,  delete[] F2, delete[] cumw,
     delete[] cs, delete[] y, delete[] y2, delete[] jumploc,  delete[] data1, delete[] data2,
-    delete[] p, delete[] p2, delete[] lowbound, delete[] upbound;
+    delete[] p, delete[] p2, delete[] lowbound, delete[] upbound, delete[] cc;
     
     for (i = 0;i<2;i++)
         delete[] freq[i], delete[] freq2[i];
