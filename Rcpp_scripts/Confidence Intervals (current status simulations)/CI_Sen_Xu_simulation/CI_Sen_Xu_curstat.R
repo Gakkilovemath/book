@@ -25,6 +25,6 @@
    	x1<-E[,1]
    	y1<-E[,2]
    	  	
-   	plot(c(-10000,-10000),xlim=c(0.2,1.6), ylim=c(0.0,0.5), main= "", ylab="",xlab="",bty="n",las=1)
+   	plot(c(-10000,-10000),xlim=c(0.0,2.0), ylim=c(0.0,0.15), main= "", ylab="",xlab="",bty="n",las=1)
 	lines(x1,y1,lty=1)
 	lines(c(0,2),c(0.05,0.05),col="red")

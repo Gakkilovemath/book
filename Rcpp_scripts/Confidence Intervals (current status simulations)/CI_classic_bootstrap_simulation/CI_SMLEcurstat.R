@@ -6,7 +6,6 @@
 	C <- output$SMLE
 	D <- output$CI_SMLE
 	E <- output$percentages
-	
   
    x1<-B[,1]
    z1<-B[,2]
@@ -21,8 +20,7 @@
    lines(x2, z2,lwd=2,col="blue")
    segments(x3,t1,x3,u1)
 
-   
- 	E<-read.table("percentages.txt") 
+
    	x1<-E[,1]
    	y1<-E[,2]
    	  	

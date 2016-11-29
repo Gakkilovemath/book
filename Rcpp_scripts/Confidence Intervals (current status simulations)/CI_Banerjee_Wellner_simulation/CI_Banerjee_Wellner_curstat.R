@@ -5,6 +5,7 @@
 	B <- output$MLE
 	C <- output$CI_Banerjee_Wellner
 	D <- output$percentages
+
 	f <- function(x) {(1-exp(-x))/(1-exp(-2))}
 	x0<-seq(0,2,by=0.01)
 	y0<-f(x0)
@@ -25,6 +26,6 @@
    x1<-D[,1]
    y1<-D[,2]
    	  	
-   plot(c(-10000,-10000),xlim=c(0.0,2), ylim=c(0.0,0.5), main= "", ylab="",xlab="",bty="n",las=1)
+   plot(c(-10000,-10000),xlim=c(0.0,2), ylim=c(0.0,0.15), main= "", ylab="",xlab="",bty="n",las=1)
    lines(x1,y1,lty=1)
    lines(c(0,2),c(0.05,0.05),col="red")
