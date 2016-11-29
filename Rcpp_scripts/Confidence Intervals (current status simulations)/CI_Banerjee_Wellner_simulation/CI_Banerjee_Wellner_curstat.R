@@ -2,12 +2,9 @@
 	sourceCpp("Banerjee_Wellner_simulation.cpp")
   	output <- ComputeIntervals()
    
-	#B <- output$MLE
-	#C <- output$CI_Banerjee_Wellner
-	#D <- output$percentages
-	B<-read.table("MLE.txt")
-   	C<-read.table("CI_MLE.txt")
-   	D<-read.table("percentages.txt")
+	B <- output$MLE
+	C <- output$CI_Banerjee_Wellner
+	D <- output$percentages
 	f <- function(x) {(1-exp(-x))/(1-exp(-2))}
 	x0<-seq(0,2,by=0.01)
 	y0<-f(x0)

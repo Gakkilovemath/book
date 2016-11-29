@@ -6,6 +6,7 @@
 	C <- output$SMLE
 	D <- output$CI_SMLE
 	E <- output$percentages
+	
   
    x1<-B[,1]
    z1<-B[,2]

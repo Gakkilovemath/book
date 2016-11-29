@@ -212,7 +212,7 @@ List ComputeIntervals()
         SMLE[0]=0;
         
         for (i=1;i<=ngrid;i++)
-            SMLE[i]=bdf(A,B,njumps,data0,p,grid[i],h);
+            SMLE[i]=bdf(A,B,njumps,data0,p,grid[i],cc[i]*h);
         
         
         for (iter2=1;iter2<=NumIt2;iter2++)
@@ -245,7 +245,7 @@ List ComputeIntervals()
             SMLE2[0]=0;
             
             for (i=1;i<=ngrid;i++)
-                SMLE2[i]=bdf(A,B,m2,data2,p2,grid[i],h);
+                SMLE2[i]=bdf(A,B,m2,data2,p2,grid[i],cc[i]*h);
             
             
             for (i=1;i<npoints;i++)
@@ -259,8 +259,8 @@ List ComputeIntervals()
             
             qsort(f4,NumIt2,sizeof(double),compare);
             
-            lowbound[i]= SMLE[10*i]-bias(grid[10*i],h)-f4[above]*sqrt(varF(n,n,freq,y,0.0,B,data,cc[10*i]*h,grid[10*i]));
-            upbound[i]= SMLE[10*i]-bias(grid[10*i],h)-f4[below]*sqrt(varF(n,n,freq,y,0.0,B,data,cc[10*i]*h,grid[10*i]));
+            lowbound[i]= SMLE[10*i]-f4[above]*sqrt(varF(n,n,freq,y,0.0,B,data,cc[10*i]*h,grid[10*i]));
+            upbound[i]= SMLE[10*i]-f4[below]*sqrt(varF(n,n,freq,y,0.0,B,data,cc[10*i]*h,grid[10*i]));
             
             if (F0(grid[i*10])<lowbound[i] || F0(grid[i*10])>upbound[i])
                 percentage[i]++;
