@@ -69,9 +69,9 @@ List ComputeIntervals(DataFrame input)
     IntegerVector freq02 = DF["V3"];
     
     Rcout << std::endl;
-    Rcout << "Piet Groeneboom 2015" << std::endl << "For further information see:" << std::endl;
-    Rcout << "Nonparametric Estimation under Shape Constraints, pp. 8-10 and Section 9.5," << std::endl;
-    Rcout << "Piet Groeneboom & Geurt Jongbloed, Cambridge University Press, 2014." << std::endl << std::endl;
+    Rcout << "For further information see:" << std::endl;
+    Rcout << "Piet Groeneboom and Kim Hendrickx (2016) Confidence intervals for the current status model." << std::endl;
+    Rcout << "https://arxiv.org/abs/1611.08299" << std::endl << std::endl;
     Rcout << "The program produces smooth bootstrap based (pointwise) 95% confidence intervals for the cdf," << std::endl;
     Rcout << "using the resampling from the SMLE." << std::endl << std::endl;
     Rcout << "The data set is the hepatitis A data set, provided to us by Niels Keiding." << std::endl;
