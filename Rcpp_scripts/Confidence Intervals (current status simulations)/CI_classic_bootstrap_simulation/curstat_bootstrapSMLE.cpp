@@ -80,7 +80,7 @@ List ComputeIntervals()
       
     // determine the number of rows of the data frame
     
-    NumIt=1000;
+    NumIt=2000;
     NumIt2=1000;
     ngrid=1000;
     n=1000;
@@ -392,8 +392,8 @@ List ComputeIntervals()
     
     delete[] freq, delete[] freq2;
     
-    for (iter = 0;iter < NumIt;iter++)
-        delete[] f3[iter];
+    for (iter2 = 0;iter2 < NumIt2;iter2++)
+        delete[] f3[iter2];
     delete[] f3;
     
     return out;

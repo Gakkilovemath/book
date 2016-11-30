@@ -16,7 +16,7 @@
    u1<-D[,3]
    
    plot(c(-100,-100),xlim=c(0,max(x1)), ylim=c(0,max(u1)), main= "",ylab="",xlab="",bty="n",las=1)
-   lines(x1,z1,lwd=2,type ="s",col="red")
+   #lines(x1,z1,lwd=2,type ="s",col="red")
    lines(x2, z2,lwd=2,col="blue")
    segments(x3,t1,x3,u1)
 

@@ -393,8 +393,8 @@ List ComputeIntervals()
     delete[] y, delete[] y2, delete[] data0,  delete[] data2,
     delete[] p, delete[] p2, delete[] lowbound, delete[] upbound, delete[] f4;
     
-    for (iter = 0;iter < NumIt;iter++)
-        delete[] f3[iter];
+    for (iter2 = 0;iter2 < NumIt2;iter2++)
+        delete[] f3[iter2];
     delete[] f3;
     
     return out;

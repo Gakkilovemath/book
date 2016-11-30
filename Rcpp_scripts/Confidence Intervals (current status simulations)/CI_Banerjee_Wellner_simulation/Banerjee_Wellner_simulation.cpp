@@ -42,7 +42,7 @@ List ComputeIntervals()
     double          B,*data,*data2,*grid,step;
     double          *data0,*lowbound,*upbound;
     double          *cumw,*cs,*F,*y,*y1,*y2;
-    double          **f3,*f4,*MLE;
+    double          *MLE;
     double          a,b,*cumw1,*cs1,L,L0;
     int             i,j,k,m,m1,n,*delta,*delta2;
     int             iter,ngrid,NumIt,npoints;
@@ -89,13 +89,6 @@ List ComputeIntervals()
     
     
     MLE= new double[ngrid+1];
-    
-    f4= new double[NumIt+1];
-    
-    f3  = new double*[NumIt+1];
-    
-    for (iter=0;iter<NumIt+1;iter++)
-        f3[iter] = new double[npoints];
     
     lowbound=new double[npoints];
     upbound=new double[npoints];
@@ -335,11 +328,7 @@ List ComputeIntervals()
     
     delete[] data, delete[] data0, delete[] data2, delete[] delta, delete[] delta2,
     delete[] F, delete[] cumw, delete[] cs, delete[] cumw1, delete[] cs1, delete[] MLE,
-    delete[] y, delete[] y2, delete[] lowbound, delete[] upbound, delete[] f4;
-    
-    for (iter = 0;iter < NumIt;iter++)
-        delete[] f3[iter];
-    delete[] f3;
+    delete[] y, delete[] y2, delete[] lowbound, delete[] upbound;
     
     return out;
     
